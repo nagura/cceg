@@ -1,0 +1,6 @@
+{
+  "rule_json"   : "opt/rule.json",
+  "c_compiler"  : "gcc",
+  "debug_mode"  : "False",
+  "display_err" : "False"
+}

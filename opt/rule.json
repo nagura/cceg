@@ -1,0 +1,147 @@
+{
+    "missing_token":{
+        "if":"(\\d+):(\\d+): error: expected ‘(\\S+)’ before ‘\\S+’",
+        "then":"missing_token.insert",
+        "desc":"brktSyn, forSepSyn, curIfSyn"
+    },
+    "missing_token_at_end":{
+        "if":"(\\d+):(\\d+): error: expected ‘(\\S+)’ at end of input",
+        "then":"missing_token.insert",
+        "desc":"brktSyn"
+    },
+    "missing_lparen":{
+        "if":"(\\d+):(\\d+): error: expected ‘;’ before string constant",
+        "then":"missing_lparen.insert",
+        "desc":"brktSyn"
+    },
+    "missing_singlequote":{
+        "if":"(\\d+):(\\d+): \\w+: missing terminating ' character",
+        "then":"missing_singlequote.insert",
+        "desc":"brktSyn"
+    },
+    "missing_doublequote":{
+        "if":"(\\d+):(\\d+): \\w+: missing terminating \" character",
+        "then":"missing_doublequote.insert",
+        "desc":"brktSyn"
+    },
+    "missing_doublequote_before_zenkaku_str":{
+        "if":"(\\d+):(\\d+): error: stray ‘\\S+’ in program",
+        "then":"missing_doublequote.insert_before_zenkaku_str",
+        "desc":"brktSyn"
+    },
+    "missing_token_unspec_char":{
+        "if":"(\\d+):(\\d+): error: expected expression before ‘(\\S+)’ token",
+        "then":"missing_token.insert_unspecified_char",
+        "desc":"brktSyn, forSepSyn"
+    },
+    "confusing_rcurly":{
+        "if":"(\\d+):(\\d+): error: expected statement before ‘[\\)\\]]’ token",
+        "then":"missing_rcurly.replace",
+        "desc":"brktSyn"
+    },
+    "missing_rcurly":{
+        "if":"(\\d+):(\\d+): error: expected declaration or statement at end of input",
+        "then":"missing_rcurly.insert",
+        "desc":"brktSyn"
+    },
+    "missing_lcurly":{
+        "if":"(\\d+):(\\d+): error: expected expression before ‘}’ token",
+        "then":"missing_lcurly.insert",
+        "desc":"brktSyn"
+    },
+    "missing_lcurly_at_function_definition":{
+        "if":"(\\d+): error: expected ‘\\{’ at end of input",
+        "then":"missing_lcurly.insert_for_function_def",
+        "desc":"brktSyn"
+    },
+    "missing_lsquare_at_array_definition":{
+        "if":"(\\d+):(\\d+): error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘]’ token",
+        "then":"missing_lsquare.insert_for_array_def",
+        "desc":"brktSyn"
+    },
+    "confusing_keyword_in_variablename":{
+        "if":"(\\d+):(\\d+): error: two or more data types in declaration specifiers",
+        "then":"confusing_keyword.replace_varname",
+        "desc":"keySyn"
+    },
+    "confusing_keyword_in_variable_and_pointer_name":{
+        "if":"(\\d+):(\\d+): error: expected identifier or ‘\\(’ before ‘(\\w+)’",
+        "then":"confusing_keyword.replace_varname",
+        "desc":"keySyn"
+    },
+    "mismatch_conversion":{
+        "if":"(\\d+):(\\d+): warning: format ‘(%\\S+)’ expects argument of type ‘([\\w\\*\\s]+)’, but argument (\\d+) has type ‘([\\w\\*\\s]+)’",
+        "then":"mismatch_conversion.replace",
+        "desc":"calTyp"
+    },
+    "conversion_lack_of_args":{
+        "if":"(\\d+):(\\d+): warning: format ‘(%\\S+)’ expects a matching ‘([\\w\\*\\s]+)’ argument",
+        "then":"mismatch_conversion.add_args",
+        "desc":"calTyp"
+    },
+    "conversion_too_many_args":{
+        "if":"(\\d+):(\\d+): warning: too many arguments for format",
+        "then":"mismatch_conversion.remove_args",
+        "desc":"calTyp"
+    },
+    "mismatch_functioncall_args":{
+        "if":"(\\d+):(\\d+): warning: passing argument (\\d+) of ‘(\\w+)’ makes (\\S+) from (\\S+) without a cast",
+        "then":"mismatch_functioncall.replace_ptr_in_args",
+        "desc":"calTyp"
+    },
+    "mismatch_return_args":{
+        "if":"(\\d+):(\\d+): warning: returning ‘([\\w\\*\\s]+)’ from a function with return type ‘int’ makes integer from pointer without a cast",
+        "then":"mismatch_functioncall.replace_ptr_in_return_args",
+        "desc":"calTyp"
+    },
+    "mismatch_args_num":{
+        "if":"(\\d+):(\\d+): error: too few arguments to function ‘(\\w+)’",
+        "then":"mismatch_functioncall.replace_args",
+        "desc":"calTyp"
+    },
+    "missing_functioncall_parentheses":{
+        "if":"(\\d+):(\\d+): error: invalid operands to binary (\\S) \\(have ‘(\\w+) \\(\\*\\)(\\(\\w+\\))’ and ‘(\\w+) \\(\\*\\)(\\(\\w+\\))’\\)",
+        "then":"missing_functioncall_parentheses.insert_in_methodarg",
+        "desc":"parCalSyn"
+    },
+    "missing_functioncall_parentheses_warn":{
+        "if":"(\\d+):(\\d+): warning: statement with no effect",
+        "then":"missing_functioncall_parentheses.insert",
+        "desc":"parCalSyn"
+    },
+    "incorrect_semicolon_at_method_header":{
+        "if":"(\\d+):(\\d+): error: expected identifier or ‘\\(’ before ‘\\{’ token",
+        "then":"incorrect_semicolon.remove",
+        "desc":"smiHdSyn"
+    },
+    "confusing_compare_symbol_order":{
+        "if":"(\\d+):(\\d+): error: expected expression before ‘([<>])’ token",
+        "then":"confusing_compare_sym.replace_order",
+        "desc":"cmpSyn"
+    },
+    "missing_return_statement":{
+        "if":"(\\d+):(\\d+): warning: control reaches end of non-void function",
+        "then":"missing_return_stmt.add",
+        "desc":"noRtnSem"
+    },
+    "unnecessary_typename_in_functioncall":{
+        "if":"(\\d+):(\\d+): error: expected expression before ‘[\\w\\*\\s]’",
+        "then":"unnecessary_typename.remove_from_functioncall",
+        "desc":"typCalSyn"
+    },
+    "incompatible_rtn_type":{
+        "if":"(\\d+):(\\d+): warning: assignment to ‘([\\w\\*\\s]+)’ from ‘([\\w\\*\\s]+)’ makes (\\w+) from (\\w+) without a cast",
+        "then":"incompatible_rtn_type.adjust_rtn_type",
+        "desc":"rtnTyp"
+    },
+    "unknown_type_name":{
+        "if":"(\\d+):(\\d+): error: unknown type name ‘[\\w\\*\\s]’; did you mean ‘[\\w\\*\\s]’\\?",
+        "then":"unknown_type_name.replace",
+        "desc":"other"
+    },
+    "missing_include":{
+        "if":"(\\d+):(\\d+): note: include ‘(\\S+)’ or provide a declaration of ‘(\\w+)’",
+        "then":"missing_include.add",
+        "desc":"other"
+    }
+}
