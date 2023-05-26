@@ -235,7 +235,7 @@ def display_group(g_no, msg_grps, list_errmsg):
 ### プログラムの終了時の処理
 def cleanup_exit(tmpdir):
         # テンポラリディレクトリとファイルを削除
-        #shutil.rmtree(tmpdir)
+        shutil.rmtree(tmpdir)
         exit(0)
 
 def main():
