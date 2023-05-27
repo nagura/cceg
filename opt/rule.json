@@ -90,7 +90,7 @@
         "desc":"calTyp"
     },
     "mismatch_return_args":{
-        "if":"(\\d+):(\\d+): warning: returning ‘([\\w\\*\\s]+)’ from a function with return type ‘int’ makes integer from pointer without a cast",
+        "if":"(\\d+):(\\d+): warning: returning ‘([\\(\\)\\w\\*\\s]+)’ from a function with return type ‘int’ makes integer from pointer without a cast",
         "then":"mismatch_functioncall.replace_ptr_in_return_args",
         "desc":"calTyp"
     },
