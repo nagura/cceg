@@ -20,9 +20,11 @@ def remove(lines, params):
         cnt += (cols - 1) # decrement character length of '{' 
 
         # extract incorrect string
-        incorrect_str = re.search('\w+\s+\w+\([^\)]*\)(\s*\S+\s*)$', concatinated_line[:cnt]).group(1)
-        # remove incorrect string
-        concatinated_line = concatinated_line[:cnt - len(incorrect_str)] + ''.join(re.findall('\n', incorrect_str)) + concatinated_line[cnt:]
+        strs = re.search('\w+\s+\w+\([^\)]*\)(\s*\S+\s*)$', concatinated_line[:cnt])
+        if strs != None:
+                incorrect_str = strs.group(1)
+                # remove incorrect string
+                concatinated_line = concatinated_line[:cnt - len(incorrect_str)] + ''.join(re.findall('\n', incorrect_str)) + concatinated_line[cnt:]
 
         # translate to the line array
         return [line + '\n' for line in concatinated_line.splitlines()]

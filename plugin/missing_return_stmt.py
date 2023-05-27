@@ -10,8 +10,10 @@ def add(lines, params):
                 # lack of return statement
                 modified_lines = replace_comments_and_str(lines)
                 def_str = get_func_def_str(substring(modified_lines, int(params[0]) - 1, cols))[-1]
-                lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
-                                + 'return (' + make_an_argument(re.findall('(\w+)\s+\w+\s*\([^\)]*\)', def_str)[0]) + ');\n'\
-                                + lines[int(params[0]) - 1][cols - 1:]
+                ret_type = re.findall('(\w+)\s+\w+\s*\([^\)]*\)', def_str)
+                if ret_type != []:
+                        lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
+                                        + 'return (' + make_an_argument(ret_type[0]) + ');\n'\
+                                        + lines[int(params[0]) - 1][cols - 1:]
                 
         return lines

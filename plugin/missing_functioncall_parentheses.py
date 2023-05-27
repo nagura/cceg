@@ -45,10 +45,10 @@ def insert(lines, params):
 
         # extract function definition string
         def_str = get_func_def_str(modified_lines, func_name)
-
-        # replace argument string
-        lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1 + len(func_name)] \
-                                + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
-                                + lines[int(params[0]) - 1][cols - 1 + len(func_name):]
+        if def_str != None:
+                # replace argument string
+                lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1 + len(func_name)] \
+                                        + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
+                                        + lines[int(params[0]) - 1][cols - 1 + len(func_name):]
 
         return lines

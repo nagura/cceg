@@ -24,17 +24,8 @@ def replace(lines, params):
         if re.search('\(\*\)\([\w,\s,\*]*\)', params[5]):
                 # maybe a mistake in argument parameter (the parameter maybe function name)
 
-                if params[3] in ['char *']:
-                        param_str = "\"XX\""
-                elif '*' in params[3]:
-                        # could not make parameters with pointers
-                        param_str = "NULL"
-                elif params[3] in ['int', 'short', 'long']:
-                        param_str = "0"
-                elif params[3] in ['double', 'float']:
-                        param_str = "0.0"
-                elif params[3] in ['char']:
-                        param_str = "'X'"
+                # parameters to add
+                param_str = make_an_argument(params[3])
 
                 # retrieve the position to insert                
                 cols = __skip_pos_to_insert(lines, params, cols)
@@ -103,16 +94,9 @@ def add_args(lines, params):
         while cols < len(lines[int(params[0]) - 1]) and re.search('\)\s*;', lines[int(params[0]) - 1][cols:]) != None:
                 cols += 1
 
-        # parameters to add        
-        if params[3] in ['double', 'float']:
-                val = "0.0"
-        elif params[3] in ['int', 'short']:
-                val = "0"
-        elif params[3] in ['char']:
-                val = "'X'"
-        elif params[3] in ['char *']:
-                val = "\"XX\""
-
+        # parameters to add
+        val = make_an_argument(params[3])
+        
         # add a parameter
         lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
                                 + "," + val \
@@ -134,13 +118,14 @@ def remove_args(lines, params):
                 cols += 1
         
         # count number of args from double-quoted string
-        num_args = len(re.findall('%[^%]+', lines[int(params[0]) - 1][str_start:cols]))
-
+        num_args = len(re.findall('%[\d\.csduoxfegl]+', re.sub('%%', '', lines[int(params[0]) - 1][str_start:cols])))
         # skip to start posiotion of unnecessary argument
         for i in range(num_args + 1):
                 cols += 1
                 while lines[int(params[0]) - 1][cols] != ',':
                         cols += 1
+                        if len(lines[int(params[0]) - 1]) == cols:
+                                return lines
 
         # start position to cut
         cut_start = cols

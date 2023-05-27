@@ -20,9 +20,10 @@ def replace_ptr_in_args(lines, params):
         else:
                 # extract function definition string of indicated function name
                 def_str = get_func_def_str(lines, params[3])
-                lines[int(params[0]) - 1] = re.sub('\s*\(\s*$', '', lines[int(params[0]) - 1][:cols - 1]) \
-                                + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
-                                + re.sub('\s*[^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
+                if def_str != None:
+                        lines[int(params[0]) - 1] = re.sub('\s*\(\s*$', '', lines[int(params[0]) - 1][:cols - 1]) \
+                                        + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
+                                        + re.sub('\s*[^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
                 
         return lines
 
@@ -62,9 +63,10 @@ def replace_args(lines, params):
 
         # extract line string before the function call
 
-        # replace argument string
-        lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
-                                + params[2] \
-                                + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
-                                + re.sub(params[2] + '\s*\([^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
+        if def_str != None:
+                # replace argument string
+                lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
+                                        + params[2] \
+                                        + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
+                                        + re.sub(params[2] + '\s*\([^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
         return lines

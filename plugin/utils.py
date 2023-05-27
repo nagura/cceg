@@ -59,6 +59,9 @@ def parse_params(params_str):
 
 ## extract function definition string of func_name function from source code list
 def get_func_def_str(lines, func_name='\w+'):
+        # check function name
+        if func_name != '\w+' and re.sub('\w+', '', func_name) != '':
+                return None
         # remove characters inside double-quoted strings and comments to enable retrieving position even the string or the comment includes retrieval targeted characters.
         modified_lines = replace_comments_and_str(lines)
 
