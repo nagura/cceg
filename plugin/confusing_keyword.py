@@ -13,6 +13,7 @@ def replace_varname(lines, params):
         incorrect_name = re.findall('\w+', lines[int(params[0]) - 1][cols - 1:])[0]
 
         if is_c89_keyword(incorrect_name): # check whether the name is included in keywords or not
+                # when the incorrect_name is one of keyword
                 vars = extract_variables(lines)
 
                 if (get_func_def_str(lines, incorrect_name) == None): # variable name

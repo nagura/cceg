@@ -83,7 +83,8 @@ def get_func_def_str(lines, func_name='\w+'):
         
         if func_name != '\w+':
                 # return function definition string specified by func_name
-                return [def_str[1] for def_str in func_defs if def_str[0] == func_name][0]
+                matched_funcs = [def_str[1] for def_str in func_defs if def_str[0] == func_name]
+                return None if matched_funcs == [] else matched_funcs[0]
         else:
                 # return all function definition string list ordered by appearance
                 return [def_str[1] for def_str in func_defs]
