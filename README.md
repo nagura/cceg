@@ -24,7 +24,28 @@ or
 Note that the cceg above mentioned is the symlink for cceg.py.
 
 ### Sample usage
-The sample file included (sample.c) is tiny example of incorrect program file. This sample file contains 5 grammatically errors as follows.  
+The sample file included (sample.c) is tiny example of incorrect program file. 
+
+```{r, attr.source='.numberLines'}
+#include <stdio.h>
+
+int print_tt ( )
+ {
+  for [int i = 1; i <= 12; i++){
+    for (int j = 1; j <= 12; j++)
+      printf("%3d", i * j);
+    printf("\n")
+  }
+}
+
+int main( void ) {
+  printf("Print time tables:\n");
+  print_tt;
+]
+```
+
+
+This sample file contains 5 grammatically errors as follows.  
 - (Line:5) for [int i = 1; i <= 12; i++){ *[confusing parenthesis with square bracket]*
 - (Line:8) printf("\n")  *[missing semi-colon]*
 - (Line:10) *[missing return statement for non-void function]*
@@ -36,6 +57,55 @@ If you use cceg with "-Wall" option instead of gcc (as follows), you will see th
 
 ```
 % ./cceg -Wall sample.c
+--- Error Group #1 ---
+sample.c: In function ‘print_tt’:
+sample.c:5:7: error: expected ‘(’ before ‘[’ token
+    5 |   for [int i = 1; i <= 12; i++){
+      |       ^
+      |       (
+sample.c:5:31: error: expected ‘;’ before ‘)’ token
+    5 |   for [int i = 1; i <= 12; i++){
+      |                               ^
+      |                               ;
+sample.c:5:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+    5 |   for [int i = 1; i <= 12; i++){
+      |   ^~~
+sample.c:5:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+    5 |   for [int i = 1; i <= 12; i++){
+      |                               ^
+sample.c:5:31: error: expected statement before ‘)’ token
+sample.c:7:21: error: ‘i’ undeclared (first use in this function)
+    7 |       printf("%3d", i * j);
+      |                     ^
+sample.c:7:21: note: each undeclared identifier is reported only once for each function it appears in
+
+--- Error Group #2 ---
+sample.c: In function ‘print_tt’:
+sample.c:8:17: error: expected ‘;’ before ‘}’ token
+    8 |     printf("\n")
+      |                 ^
+      |                 ;
+    9 |   }
+      |   ~
+
+--- Error Group #3 ---
+sample.c: In function ‘main’:
+sample.c:14:3: warning: statement with no effect [-Wunused-value]
+   14 |   print_tt;
+      |   ^~~~~~~~
+
+--- Error Group #4 ---
+sample.c: In function ‘main’:
+sample.c:15:1: error: expected statement before ‘]’ token
+   15 | ]
+      | ^
+sample.c:15:1: error: expected declaration or statement at end of input
+
+--- Error Group #5 ---
+sample.c: In function ‘print_tt’:
+sample.c:10:1: warning: control reaches end of non-void function [-Wreturn-type]
+   10 | }
+      | ^
 ```
 
 
