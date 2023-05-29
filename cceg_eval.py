@@ -324,7 +324,21 @@ def main():
                                         # then 部の修正処理を実施して，ソースファイルを保存
                                         with open(os.path.join(tmpdir, src_fname), 'w') as f:
                                                 # 修正後ソースファイルを保存
-                                                lines = eval(cmd)
+                                                try:
+                                                        lines_orig = lines
+                                                        lines = eval(cmd)
+                                                except:
+                                                        # プラグイン実行でエラーがあった場合には，修正せずに続行する．
+                                                        print("\033[31m[Message]\033[0m When the plugin module '" + rule_json[rule]['then']  + "' is executed the exception has occured by plugin execution, but continuing to processing.")
+                                                        print("\tRule: " + rule)
+                                                        print("\tMatched error message: " + line.rstrip())
+                                                        print("\tParameters for plugin execution: " + str(params))
+                                                        print("The occurred exception is follows: ")
+                                                        import traceback
+                                                        print("--- exception start --- ")
+                                                        traceback.print_exc()
+                                                        print("--- exception end --- ")
+                                                        lines = lines_orig
                                                 f.writelines(lines)
                                         
                                         # 修正後ソースファイルをコンパイル
@@ -423,9 +437,9 @@ if __name__ == "__main__":
 
         df2 = None
         for i, record in enumerate(df.itertuples()):
-                if i < start:
+                if i + 1 < start:
                        continue
-                print("processing " + str(i) +"th error report....")
+                print("processing " + str(i + 1) +"th error message....")
                 log = Logger(True)
                 with open(os.path.join(".", src), 'w') as f:
                         print(record.list, file=f, end='') # 最後に余計な改行文字を付加しないようにしている
