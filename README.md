@@ -169,6 +169,8 @@ The default if-then rules to avoid compilation error is included in *opt/rule.js
 
 Return value of the method must be string array of modified lines whose error represented by if condition is eliminated.
 
+Note: The default if-then rules included are based on the error messages of the GNU C Compiler 9.4.0. If you want to use other compiler by specifiyng ***c_compiler*** in "opt/config.json", you should describe the rules based on the messages of  ***c_compiler***，then you should prepare plugin programs used to eliminate the errors. As a side note, using the CC on major Linux, the entity of CC command is the GCC and using it with default if-then rules is no problem. But the CC on MacOS, the entity of it is not GCC and the error messages output by it are defferent from the messages using GCC, then many default if-then rules will not process well.
+
 ## Author
 * **Masataka NAGURA** - *Initial work* - [nagura](https://github.com/nagura)
 
