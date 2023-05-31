@@ -455,5 +455,6 @@ if __name__ == "__main__":
                 if num_eval - 1 == i:
                         break
         df2.to_csv("eval.csv")
+        df2.drop(columns=Dest.DEBUG.value).to_csv("eval_no_debug.csv")
 
 
