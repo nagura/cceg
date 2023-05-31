@@ -42,7 +42,10 @@ class Logger:
                 if mode != Dest.RULES:
                         s = pd.concat([s, pd.Series([self.__log[mode.value]], index = [mode.value])])
                 else:
-                        s = pd.concat([s, pd.Series([self.__log[mode.value].split()], index = [mode.value])])
+                        rules = self.__log[mode.value].split()
+                        s = pd.concat([s, pd.Series([rules], index = [mode.value])])
+        s = pd.concat([s, pd.Series([len(rules)], index = ['RULES_NUM'])])
+        s = pd.concat([s, pd.Series([len(set(rules))], index = ['RULES_UNQ_NUM'])])
         return pd.DataFrame(s).T
                
 ### 修正可否を示すための列挙子
