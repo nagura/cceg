@@ -135,7 +135,7 @@
         "desc":"rtnTyp"
     },
     "unknown_type_name":{
-        "if":"(\\d+):(\\d+): error: unknown type name ‘[\\w\\*\\s]+’; did you mean ‘[\\w\\*\\s]+’\\?",
+        "if":"(\\d+):(\\d+): error: unknown type name ‘([\\w\\*\\s]+)’; did you mean ‘([\\w\\*\\s]+)’\\?",
         "then":"unknown_type_name.replace",
         "desc":"other"
     },
