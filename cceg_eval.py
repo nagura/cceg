@@ -19,6 +19,7 @@ class Dest(Enum):
     DEBUG = 'DEBUG'
     RESULT = 'RESULT'
     GRP_NUM = 'GRP_NUM'
+    UNK_NUM = 'UNK_NUM'
     RULES = 'RULES'
 
 ### ログ出力制御用クラス
@@ -402,8 +403,11 @@ def main():
         # 分類できなかったメッセージを表示
         if len(msg_grps) > 0:
                 # 分類できなかったメッセージ（グループ番号 0）がある．
+                log.print(len(msg_grps), end='', mode=Dest.UNK_NUM)
                 display_group(0, msg_grps, list_errmsg)
                 log.print("", mode=Dest.RESULT) # グループごとの区切りのために改行
+        else:
+                log.print(0, end='', mode=Dest.UNK_NUM)
 
         # 後処理をして終了
         cleanup_exit(tmpdir)
