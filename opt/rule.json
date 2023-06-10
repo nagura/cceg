@@ -125,7 +125,7 @@
         "desc":"noRtnSem"
     },
     "unnecessary_typename_in_functioncall":{
-        "if":"(\\d+):(\\d+): error: expected expression before ‘[\\w\\*\\s]’",
+        "if":"(\\d+):(\\d+): error: expected expression before ‘([\\w\\*\\s]+)’",
         "then":"unnecessary_typename.remove_from_functioncall",
         "desc":"typCalSyn"
     },
@@ -135,7 +135,7 @@
         "desc":"rtnTyp"
     },
     "unknown_type_name":{
-        "if":"(\\d+):(\\d+): error: unknown type name ‘[\\w\\*\\s]’; did you mean ‘[\\w\\*\\s]’\\?",
+        "if":"(\\d+):(\\d+): error: unknown type name ‘[\\w\\*\\s]+’; did you mean ‘[\\w\\*\\s]+’\\?",
         "then":"unknown_type_name.replace",
         "desc":"other"
     },
