@@ -1,5 +1,5 @@
 # cceg
-C compiler with error message grouping
+C compilation tool with error message grouping
 
 ## Getting started
 ### Prerequisites
