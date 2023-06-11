@@ -16,14 +16,14 @@ def replace_ptr_in_args(lines, params):
         if re.match(pattern, lines[int(params[0]) - 1][cols - 1:]):
                 # remove '*' character if exist
                 lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
-                                + re.sub(pattern, '', lines[int(params[0]) - 1][cols - 1:]) 
+                                + re.sub(pattern, '', lines[int(params[0]) - 1][cols - 1:], 1) 
         else:
                 # extract function definition string of indicated function name
                 def_str = get_func_def_str(lines, params[3])
                 if def_str != None:
-                        lines[int(params[0]) - 1] = re.sub('\s*\(\s*$', '', lines[int(params[0]) - 1][:cols - 1]) \
+                        lines[int(params[0]) - 1] = re.sub('\s*\(\s*$', '', lines[int(params[0]) - 1][:cols - 1], 1) \
                                         + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
-                                        + re.sub('\s*[^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
+                                        + re.sub('\s*[^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:], 1)
                 
         return lines
 
@@ -38,7 +38,7 @@ def replace_ptr_in_return_args(lines, params):
                 pattern = '\)\s*;'
         else:
                 if re.search('\s$', line_former_half) == None:
-                        line_former_half = re.sub('\s*\S+$', ' ', line_former_half) 
+                        line_former_half = re.sub('\s*\S+$', ' ', line_former_half, 1) 
 
                 pattern = '\s*;'
 
@@ -68,5 +68,6 @@ def replace_args(lines, params):
                 lines[int(params[0]) - 1] = lines[int(params[0]) - 1][:cols - 1] \
                                         + params[2] \
                                         + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
-                                        + re.sub(params[2] + '\s*\([^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:])
+                                        + re.sub(params[2] + '\s*\([^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:], 1)
+                print(lines[int(params[0]) - 1])
         return lines

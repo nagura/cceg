@@ -151,8 +151,8 @@ def isResolved(target_msg, orig_msgs, err_msgs):
 
 ### msg_grps と err_msgs を比較して，msg_grps のメッセージで解決したものを，このコンパイルに対するグループ番号 num でマークする
 def markResolved(target_line, msg_grps, err_msgs, num):
-        resolved = False
-
+        unresolved = sum([i == 0 for i in msg_grps.values()])
+        
         # 判別対象のメッセージと，比較対象のメッセージの選択
         orig_msgs = [] 
         err_msgs = get_errs(err_msgs) # 修正後に発生したエラーメッセージ（比較対象）
@@ -179,10 +179,10 @@ def markResolved(target_line, msg_grps, err_msgs, num):
                 orig_msgs.insert(0, target_in_grpkey[0])
         
         # 判別対象の各メッセージについて，解決したかどうかを判別する
+        resulved = True
         for orig_msg in orig_msgs:
                 # msg_grps から取得したメッセージについて，解決したかどうかを判定
                 if isResolved(orig_msg, orig_msgs, err_msgs):
-                        resolved = True
                         if orig_msg in msg_grps.keys():
                                 msg_grps[orig_msg] = num
                 else:
@@ -192,6 +192,8 @@ def markResolved(target_line, msg_grps, err_msgs, num):
                                 break
         log.print("[Grouping Status]")
         log.print(msg_grps)
+        if resolved:
+               resolved = unresolved - sum([i == 0 for i in msg_grps.values()]) > 0
         return (resolved, msg_grps)
 
 ### list_errmsg から指定されたグループのメッセージを表示．
@@ -316,8 +318,12 @@ def main():
                                                 # 修正後ソースファイルにエラーが残存
                                                 (resolved, msg_grps) = markResolved(line, msg_grps, open_file(os.path.join(tmpdir, out_fname)), fnames.seq())
                                                 if resolved: # エラーが1つ以上解決された
-                                                        # 修正したファイルのコンパイル結果を基にする必要がある．
-                                                        status = Status.PARTIALLY_SOLVED
+                                                        if sum([i == 0 for i in msg_grps.values()]) == 0:
+                                                                # 分類対象のメッセージが全て分類された
+                                                                status = Status.ALL_SOLVED
+                                                        else:
+                                                                # 分類対象のメッセージが残っている -> 修正したファイルのコンパイル結果を基に再度分類する必要がある．
+                                                                status = Status.PARTIALLY_SOLVED
                                                 else: #エラーが無くならなかったか，別のエラーが生じた（修正失敗）
                                                         # 修正を破棄して，次のエラー行を検査する
                                                         os.remove(os.path.join(tmpdir, src_fname))
