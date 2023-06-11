@@ -69,5 +69,4 @@ def replace_args(lines, params):
                                         + params[2] \
                                         + make_arguments_str(re.findall('\([^\)]*\)', def_str)[0]) \
                                         + re.sub(params[2] + '\s*\([^\)]*\)', '', lines[int(params[0]) - 1][cols - 1:], 1)
-                print(lines[int(params[0]) - 1])
         return lines
