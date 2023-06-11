@@ -21,6 +21,7 @@ class Dest(Enum):
     GRP_NUM = 'GRP_NUM'
     UNK_NUM = 'UNK_NUM'
     RULES = 'RULES'
+    MSGS = 'MSGS'
 
 ### ログ出力制御用クラス
 class Logger:
@@ -40,12 +41,15 @@ class Logger:
 
     def save(self, s):
         for mode in Dest:
-                if mode != Dest.RULES:
-                        s = pd.concat([s, pd.Series([self.__log[mode.value]], index = [mode.value])])
-                else:
+                if mode == Dest.RULES:
                         rules = self.__log[mode.value].split()
                         s = pd.concat([s, pd.Series([rules], index = [mode.value])])
-        s = pd.concat([s, pd.Series([len(rules)], index = ['RULES_NUM'])])
+                elif mode == Dest.MSGS:
+                        msgs = self.__log[mode.value].split()
+                        s = pd.concat([s, pd.Series([msgs], index = [mode.value])])
+                else:
+                        s = pd.concat([s, pd.Series([self.__log[mode.value]], index = [mode.value])])
+        #s = pd.concat([s, pd.Series([len(rules)], index = ['RULES_NUM'])])
         s = pd.concat([s, pd.Series([len(set(rules))], index = ['RULES_UNQ_NUM'])])
         return pd.DataFrame(s).T
                
@@ -345,6 +349,10 @@ def main():
                                                         lines = lines_orig
                                                 f.writelines(lines)
                                         
+                                        def count_unresolved(msg_grps):
+                                                return sum([i == 0 for i in msg_grps.values()])
+
+                                        unresolved = count_unresolved(msg_grps)
                                         # 修正後ソースファイルをコンパイル
                                         if store_msgs(compile_process(src_fname, exec, warn, tmpdir, display=disp), tmpdir, out_fname) == True:
                                                 # 修正後ソースファイルにエラーが残存
@@ -352,7 +360,13 @@ def main():
                                                 if resolved: # エラーが1つ以上解決された
                                                         # 修正したファイルのコンパイル結果を基にする必要がある．
                                                         log.print(rule, end=" ", mode=Dest.RULES)
-                                                        status = Status.PARTIALLY_SOLVED
+                                                        log.print(str(unresolved - count_unresolved(msg_grps)), end=" ", mode=Dest.MSGS)
+                                                        if sum([i == 0 for i in msg_grps.values()]) == 0:
+                                                                # 分類対象のメッセージが全て分類された
+                                                                status = Status.ALL_SOLVED
+                                                        else:
+                                                                # 分類対象のメッセージが残っている
+                                                                status = Status.PARTIALLY_SOLVED
                                                 else: #エラーが無くならなかったか，別のエラーが生じた（修正失敗）
                                                         # 修正を破棄して，次のエラー行を検査する
                                                         os.remove(os.path.join(tmpdir, src_fname))
@@ -362,6 +376,7 @@ def main():
                                                 #エラーが全部なくなった
                                                 (resolved, msg_grps) = markResolved(line, msg_grps, "", fnames.seq()) # エラーメッセージは発生していないので空文字
                                                 log.print(rule, end=" ", mode=Dest.RULES)
+                                                log.print(str(unresolved - count_unresolved(msg_grps)), end=" ", mode=Dest.MSGS)
                                                 status = Status.ALL_SOLVED
                                         log.print(str(status))
                                 if status != Status.NONE: # ルールが適用できなかったか，適用しても解決しなかったら，次のルールを試す．そうでない場合は break
