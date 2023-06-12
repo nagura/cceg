@@ -188,8 +188,8 @@ def isResolved(target_msg, orig_msgs, err_msgs):
 
 ### msg_grps と err_msgs を比較して，msg_grps のメッセージで解決したものを，このコンパイルに対するグループ番号 num でマークする
 def markResolved(target_line, msg_grps, err_msgs, num):
-        resolved = False
-
+        unresolved = sum([i == 0 for i in msg_grps.values()])
+        
         # 判別対象のメッセージと，比較対象のメッセージの選択
         orig_msgs = [] 
         err_msgs = get_errs(err_msgs) # 修正後に発生したエラーメッセージ（比較対象）
@@ -216,10 +216,12 @@ def markResolved(target_line, msg_grps, err_msgs, num):
                 orig_msgs.insert(0, target_in_grpkey[0])
         
         # 判別対象の各メッセージについて，解決したかどうかを判別する
+        resolved = True
         for orig_msg in orig_msgs:
+                if msg_grps[orig_msg] > 0:
+                       continue
                 # msg_grps から取得したメッセージについて，解決したかどうかを判定
                 if isResolved(orig_msg, orig_msgs, err_msgs):
-                        resolved = True
                         if orig_msg in msg_grps.keys():
                                 msg_grps[orig_msg] = num
                 else:
@@ -229,6 +231,8 @@ def markResolved(target_line, msg_grps, err_msgs, num):
                                 break
         log.print("[Grouping Status]")
         log.print(msg_grps)
+        if resolved:
+               resolved = unresolved - sum([i == 0 for i in msg_grps.values()]) > 0
         return (resolved, msg_grps)
 
 ### list_errmsg から指定されたグループのメッセージを表示．
