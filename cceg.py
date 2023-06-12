@@ -179,7 +179,7 @@ def markResolved(target_line, msg_grps, err_msgs, num):
                 orig_msgs.insert(0, target_in_grpkey[0])
         
         # 判別対象の各メッセージについて，解決したかどうかを判別する
-        resulved = True
+        resolved = True
         for orig_msg in orig_msgs:
                 # msg_grps から取得したメッセージについて，解決したかどうかを判定
                 if isResolved(orig_msg, orig_msgs, err_msgs):
