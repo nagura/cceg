@@ -181,6 +181,8 @@ def markResolved(target_line, msg_grps, err_msgs, num):
         # 判別対象の各メッセージについて，解決したかどうかを判別する
         resolved = True
         for orig_msg in orig_msgs:
+                if msg_grps[orig_msg] > 0:
+                       continue
                 # msg_grps から取得したメッセージについて，解決したかどうかを判定
                 if isResolved(orig_msg, orig_msgs, err_msgs):
                         if orig_msg in msg_grps.keys():
