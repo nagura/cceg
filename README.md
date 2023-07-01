@@ -3,7 +3,7 @@ C compilation tool with error message grouping
 
 ## Getting started
 ### Prerequisites
-The cceg is executed on the Python 3.8.10 or later. It uses C compiler like CC or GCC. The execution was checked using GCC 9.4.0.
+The cceg is executed on the Python 3.8 or later (because of using walrus operator). It uses C compiler like CC or GCC. The execution was checked using Python 3.8.10 and GCC 9.4.0.
 
 ### How to run
 To use this on the Linux, please execute following command:
